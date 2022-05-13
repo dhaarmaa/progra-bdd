@@ -1,0 +1,37 @@
+SET SERVEROUTPUT ON;
+VAR b_run_emp NUMBER;
+VAR b_porcentaje NUMBER;
+
+DECLARE 
+    v_run_emp VARCHAR2(12);
+    v_dv_run VARCHAR2(1);
+    v_nombre VARCHAR2(35);
+    v_sueldo NUMBER(10);
+    v_sueldo_reajustado NUMBER(10);
+    v_reajuste NUMBER(10);
+BEGIN
+    :b_run_emp := 12260812;
+    :b_porcentaje := &porc;
+    --Bloque principal
+    SELECT numrut_emp||'-'||dvrut_emp,
+                  nombre_emp||' '||appaterno_emp||' '||apmaterno_emp,
+                  sueldo_emp
+        INTO v_run_emp,
+                  v_nombre,
+                  v_sueldo
+        FROM empleado
+    WHERE numrut_emp = :b_run_emp;
+    
+    --Cálculo v_sueldo_reajustado
+    v_sueldo_reajustado := v_sueldo + (v_sueldo * :b_porcentaje);
+    
+    --Cálculo v_reajuste
+    v_reajuste := v_sueldo * :b_porcentaje;
+    
+    DBMS_OUTPUT.PUT_LINE('NOMBRE DEL EMPLEADO: '||v_nombre);
+    DBMS_OUTPUT.PUT_LINE('RUN: '||v_run_emp);
+    DBMS_OUTPUT.PUT_LINE('SIMULACIÓN 1: Aumentar en 8,5% el salario de todos los empleados');
+    DBMS_OUTPUT.PUT_LINE('Sueldo actual: '||v_sueldo);
+    DBMS_OUTPUT.PUT_LINE('Sueldo reajustado: '||v_sueldo_reajustado);
+    DBMS_OUTPUT.PUT_LINE('Reajuste: '||v_reajuste);
+END;
